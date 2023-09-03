@@ -2,10 +2,12 @@ openapi: 3.0.0
 info:
   version: 2.0.0
   title: Interfy API
-  description: Interfy Platform API
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  description: |-
+    This is the OpenAPI 3.0 specification for the Interfy API v2.
+    The API can be accessed using the base URL of the Workspace you want to use (same URL that can be accessed in the browser)
+    or can be accessed via https://api.interfy.io.
+    When using through the latter option, the X-Workspace header *must be included in any and all requests*.
+    This header follows the following format: {domain}-{workspaceName}. As an example, for the workspace at dev.interfy.io, the header would be "interfy-dev".
 servers:
   - url: https://{workspace}.{domainLocation}
     variables:
@@ -647,6 +649,10 @@ components:
           $ref: '#/components/schemas/ECMPhysicalDocument'
         physical_positionBox:
           type: object
+        signatureRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ECMSignatureRequest'
     CustomProvider:
       type: object
       properties:
@@ -746,7 +752,214 @@ components:
           type: integer
         is_trial_expired:
           type: boolean
-
+    ECMDocument:
+      type: object
+      properties:
+        _id:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        title:
+          type: string
+        template_id:
+          type: string
+        fields:
+          type: object
+        positionBox_id:
+          type: integer
+        positionBox_company_id:
+          type: integer
+        physical_status_id:
+          type: integer
+        folder_id:
+          type: string
+        created_by:
+          type: integer
+        updated_by:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ECMFile'
+        positionBox:
+          type: object
+        files_count:
+          type: integer
+        versions:
+          type: array
+          items:
+            type: object
+        permissions:
+          type: object
+          properties:
+            view:
+              type: boolean
+            create:
+              type: boolean
+            edit:
+              type: boolean
+            export:
+              type: boolean
+            delete:
+              type: boolean
+            delete_files:
+              type: boolean
+            manage_upload_link:
+              type: boolean
+            list_versions:
+              type: boolean
+            request_signature:
+              type: boolean
+            upload_files:
+              type: boolean
+        creator:
+          $ref: '#/components/schemas/User'
+        template:
+          $ref: '#/components/schemas/ECMTemplate'
+        folder:
+          $ref: '#/components/schemas/ECMFolder'
+    ECMFolder:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        children_count:
+          type: integer
+        parent_id:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        permissions:
+          type: object
+          properties:
+            view:
+              type: boolean
+            edit:
+              type: boolean
+            delete:
+              type: boolean
+            delete_documents:
+              type: boolean
+            create_documents:
+              type: boolean
+            create_subfolder:
+              type: boolean
+            manage_upload_link:
+              type: boolean
+            list_versions:
+              type: boolean
+            request_signature:
+              type: boolean
+            export_documents:
+              type: boolean
+            upload_files:
+              type: boolean
+    ECMTemplate:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        current_cid:
+          type: integer
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        groups:
+          type: array
+          items:
+            type: string
+        form:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormField'
+        authorized_permissions:
+          type: object
+          properties:
+            view:
+              type: boolean
+            edit:
+              type: boolean
+            export:
+              type: boolean
+            delete:
+              type: boolean
+            use:
+              type: boolean
+            duplicate:
+              type: boolean
+    FormField:
+      type: object
+      properties:
+        cid:
+          type: string
+        type:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        size:
+          type: string
+        required:
+          type: boolean
+        status:
+          type: boolean
+        visible:
+          type: boolean
+        autoDisable:
+          type: boolean
+    ECMSignatureRequest:
+      type: object
+      properties:
+        _id:
+          type: string
+        document_id:
+          type: string
+        completed:
+          type: boolean
+        signers:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              identifier:
+                description: "Personal ID - CPF"
+                type: string
+              email:
+                type: string
+              signed:
+                type: boolean
+              _id:
+                type: string
+        updated_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
 
 paths:
   /oauth/authorize:
@@ -1734,12 +1947,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Address Type ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -1758,12 +1971,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Address Type ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -1791,12 +2004,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Address Type ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "204":
           description: Successful operation
@@ -1828,12 +2041,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Country ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -1870,12 +2083,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Zone ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -1895,12 +2108,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: CountryId
-          description: string|required
+          description: Country ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -1922,19 +2135,19 @@ paths:
         - OAuth2: []
       parameters:
         - name: CountryId
-          description: string|required
+          description: Country ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
         - name: zoneId
-          description: string|required
+          description: Zone ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -1994,12 +2207,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Document Type ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -2018,12 +2231,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Document Type ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Successful operation
@@ -2054,12 +2267,12 @@ paths:
         - OAuth2: []
       parameters:
         - name: id
-          description: string|required
+          description: Document Type ID
           in: path
           style: simple
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "204":
           description: Successful operation
@@ -2076,7 +2289,7 @@ paths:
         - OAuth2: []
       parameters:
         - name: email
-          description: string|required
+          description: User Email
           in: path
           style: simple
           required: true
@@ -2292,7 +2505,7 @@ paths:
         - OAuth2: []
       parameters:
         - name: user
-          description: integer|required
+          description: User ID
           in: path
           style: simple
           required: true
@@ -17749,293 +17962,6 @@ paths:
                 type: object
         "500":
           description: Internal Server Error
-  /api/v2/ecm/documents/{document}/files/upload:
-    post:
-      tags:
-        - ECM - Files
-      description: ""
-      parameters:
-        - name: document
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  nullable: false
-                  format: binary
-                RemoteFile:
-                  type: string
-                  nullable: false
-                  format: binary
-                remote_path:
-                  type: string
-                  nullable: false
-                  format: binary
-                name:
-                  type: string
-                  nullable: false
-                  format: string
-                file_type:
-                  type: string
-                  nullable: false
-                  format: string
-                file_size:
-                  type: integer
-                  nullable: false
-                  format: integer
-                creator:
-                  type: object
-                  nullable: false
-                  format: object
-                physical_status_id:
-                  type: object
-                  nullable: false
-                  format: object
-                physical_requested_by:
-                  type: object
-                  nullable: false
-                  format: object
-                physical_status_updated_at:
-                  type: object
-                  nullable: false
-                  format: object
-                physical_requester:
-                  type: object
-                  nullable: false
-                  format: object
-                legal_validity:
-                  type: array
-                  nullable: false
-                  format: array
-                legal_validity.certificate_id:
-                  type: integer
-                  nullable: false
-                  format: integer
-                legal_validity.title:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.author:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.keywords:
-                  type: array
-                  nullable: false
-                  format: array
-                legal_validity.scanning_location:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.doc_type:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.extra:
-                  type: array
-                  nullable: false
-                  format: array
-                legal_validity.extra.class:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.creation_date:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.creation_location:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.destination:
-                  type: integer
-                  nullable: true
-                  format: integer
-                legal_validity.extra.storage_period:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.genre:
-                  type: string
-                  nullable: true
-                  format: string
-
-  /api/v2/ecm/documents/{document}/files/downloadZip:
-    get:
-      tags:
-        - ECM - Files
-      description: ""
-      parameters:
-        - name: document
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-
-  /api/v2/ecm/lifeCycle/exportTo:
-    get:
-      tags:
-        - ECM - LifeCycle
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/documents/exportLog:
-    get:
-      tags:
-        - ECM - Documents
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
 
   /api/v2/ecm/documents/export:
     post:
@@ -21999,10 +21925,13 @@ paths:
     get:
       tags:
         - ECM - Files
-      description: ""
+      description: "List ECM Document's files"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -22014,39 +21943,20 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMFile'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Files
-      description: ""
+      description: "Upload new File into ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
           description: string|required
@@ -22056,40 +21966,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMFile'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -22098,120 +21986,93 @@ paths:
               type: object
               properties:
                 file:
+                  description: "File as binary"
                   type: string
-                  nullable: false
                   format: binary
-                RemoteFile:
-                  type: string
-                  nullable: false
-                  format: binary
+          application/json:
+            schema:
+              type: object
+              properties:
                 remote_path:
+                  description: "File location in Interfy storage - to be used only when previously uploaded"
                   type: string
-                  nullable: false
-                  format: binary
                 name:
                   type: string
+                  description: "File name - required with remote_path, ignored with file as binary"
                   nullable: false
-                  format: string
                 file_type:
                   type: string
                   nullable: false
-                  format: string
+                  description: "File extension - required with remote_path, ignored with file as binary"
                 file_size:
                   type: integer
                   nullable: false
-                  format: integer
+                  description: "File size in bytes - required with remote_path, ignored with file as binary"
                 creator:
                   type: object
-                  nullable: false
-                  format: object
+                  description: "User ID for the File Creator - will be filled with current user by default"
                 physical_status_id:
-                  type: object
-                  nullable: false
-                  format: object
+                  type: integer
                 physical_requested_by:
-                  type: object
-                  nullable: false
-                  format: object
+                  type: integer
                 physical_status_updated_at:
-                  type: object
-                  nullable: false
-                  format: object
+                  type: string
+                  format: date-time
                 physical_requester:
-                  type: object
-                  nullable: false
-                  format: object
+                  type: integer
                 legal_validity:
-                  type: array
-                  nullable: false
-                  format: array
-                legal_validity.certificate_id:
-                  type: integer
-                  nullable: false
-                  format: integer
-                legal_validity.title:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.author:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.keywords:
-                  type: array
-                  nullable: false
-                  format: array
-                legal_validity.scanning_location:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.doc_type:
-                  type: string
-                  nullable: false
-                  format: string
-                legal_validity.extra:
-                  type: array
-                  nullable: false
-                  format: array
-                legal_validity.extra.class:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.creation_date:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.creation_location:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.destination:
-                  type: integer
-                  nullable: true
-                  format: integer
-                legal_validity.extra.storage_period:
-                  type: string
-                  nullable: true
-                  format: string
-                legal_validity.extra.genre:
-                  type: string
-                  nullable: true
-                  format: string
+                  type: object
+                  description: "Metadata for generating a legally valid File for the current File"
+                  properties:
+                    certificate_id:
+                      description: "Certificate ID - must be previously added to the system and available to current User"
+                      type: integer
+                    title:
+                      type: string
+                    author:
+                      type: string
+                    keywords:
+                      type: array
+                      items:
+                        type: string
+                    scanning_location:
+                      type: string
+                    doc_type:
+                      type: string
+                    extra:
+                      description: "Optional metadata for Legal Validity"
+                      type: object
+                      properties:
+                        class:
+                          type: string
+                        creation_date:
+                          type: string
+                        creation_location:
+                          type: string
+                        destination:
+                          type: integer
+                        storage_period:
+                          type: string
+                        genre:
+                          type: string
   /api/v2/ecm/documents/{document}/files/{file}/copy:
     post:
       tags:
         - ECM - Files
-      description: ""
+      description: "Copy File to a different ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
@@ -22224,34 +22085,19 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  source:
+                    description: 'Source Document'
+                    $ref: '#/components/schemas/ECMDocument'
+                  target:
+                    description: 'Target Document'
+                    $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -22267,17 +22113,20 @@ paths:
     post:
       tags:
         - ECM - Files
-      description: ""
+      description: "Move File to a different ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
@@ -22290,34 +22139,19 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  source:
+                    description: 'Source Document'
+                    $ref: '#/components/schemas/ECMDocument'
+                  target:
+                    description: 'Target Document'
+                    $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -22333,17 +22167,20 @@ paths:
     get:
       tags:
         - ECM - Files
-      description: ""
+      description: "Get File info"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
@@ -22355,165 +22192,58 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMFile'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     delete:
       tags:
         - ECM - Files
-      description: ""
+      description: "Delete file"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-    put:
-      tags:
-        - ECM - Files
-      description: ""
-      parameters:
-        - name: document
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: file
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/documents/{document}/files/{file}/view:
     get:
       tags:
         - ECM - Files
-      description: ""
+      description: "View File"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
@@ -22523,52 +22253,32 @@ paths:
         "200":
           description: Successful operation
           content:
-            application/json:
+            application/octet-stream:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: string
+                format: binary
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/files/{file}/download:
     get:
       tags:
         - ECM - Files
-      description: ""
+      description: "Download File"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
@@ -22578,114 +22288,62 @@ paths:
         "200":
           description: Successful operation
           content:
-            application/json:
+            application/octet-stream:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: string
+                format: binary
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/files/{file}/retryLegalValidity:
     post:
       tags:
         - ECM - Files
-      description: ""
+      description: "Retry Legal Validation for File - if validation failed and can be retried"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/documents/{document}/files/{file}/signatureRequests:
     get:
       tags:
         - ECM - Files
-      description: ""
+      description: "List File Signature Requests"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
@@ -22697,87 +22355,48 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMSignatureRequest'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Files
-      description: ""
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      description: "Send new Signature Request"
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMSignatureRequest'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
+          description: Invalid request
         "500":
           description: Internal Server Error
       requestBody:
@@ -22790,65 +22409,60 @@ paths:
                 title:
                   type: string
                   nullable: false
-                  format: string
                 notify:
                   type: boolean
                   nullable: false
-                  format: boolean
                 store_results:
                   type: boolean
+                  description: "Determines whether the resulting signed file should be stored back in the Document"
                   nullable: false
-                  format: boolean
                 signers:
                   type: array
                   nullable: false
-                  format: array
-                signers.*.type:
-                  type: string
-                  nullable: false
-                  format: string
-                signers.*.step:
-                  type: integer
-                  nullable: false
-                  format: integer
-                signers.*.allowEsign:
-                  type: boolean
-                  nullable: false
-                  format: boolean
-                signers.*.user.name:
-                  type: string
-                  nullable: false
-                  format: string
-                signers.*.user.identifier:
-                  type: string
-                  nullable: false
-                  format: string
-                signers.*.user.email:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      step:
+                        type: integer
+                      allowEsign:
+                        type: boolean
+                      user:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          identifier:
+                            description: "Personal Identifier - CPF (digits only)"
+                            type: string
+                          email:
+                            type: string
   ? /api/v2/ecm/documents/{document}/files/{file}/signatureRequests/{signature_request_id}
   : get:
       tags:
         - ECM - Files
-      description: ""
+      description: "Get Signature Request"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: signature_request_id
-          description: string|required
+          description: Signature Request ID
           in: path
           style: simple
           required: true
@@ -22860,57 +22474,36 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMSignatureRequest'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   ? /api/v2/ecm/documents/{document}/files/{file}/signatureRequests/{signature_request_id}/downloadSigned
   : get:
       tags:
         - ECM - Files
-      description: ""
+      description: "Download Signed result filee"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: file
-          description: string|required
+          description: File ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: signature_request_id
-          description: string|required
+          description: Signature Request ID
           in: path
           style: simple
           required: true
@@ -22920,37 +22513,14 @@ paths:
         "200":
           description: Successful operation
           content:
-            application/json:
+            application/octet-stream:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: string
+                format: binary
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/comments:
     post:
       tags:
