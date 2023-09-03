@@ -7,6 +7,36 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
+  - url: https://{workspace}.{domainLocation}
+    variables:
+      workspace:
+        default: demo
+        description: Workspace Name
+      domainLocation:
+        enum:
+          - 'processdoc.io'
+          - 'intellify.app'
+          - 'autofy.one'
+          - 'educafy.one'
+          - 'accountify.one'
+          - 'healthify.one'
+          - 'lawfy.io'
+          - 'docsystem.io'
+          - 'interfy.io'
+          - 'deketafy.com'
+          - 'trify.com.br'
+          - 'arquify.com.br'
+          - 'tecnews.one'
+          - 'kmfy.one'
+          - 'organizefy.com'
+          - 'doker.cloud'
+          - 'arquivodigitaldoc.com.br'
+          - 'sosdireito.net'
+          - 'gestaodigitaldoc.com.br'
+          - 'clouddoc.io'
+          - 'getfy.io'
+          - 'sysdoc.com.br'
+        default: 'interfy.io'
   - url: https://api.interfy.io
 
 components:
