@@ -17967,8 +17967,10 @@ paths:
     post:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Generate ECM document export - the link to the export will be sent to the current user's email"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
@@ -17976,34 +17978,15 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  success:
+                    type: boolean
         "403":
           description: Forbidden
         "404":
-          description: Not Found
+          description: Not Found - in case one of the IDs provided can't be found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -18012,17 +17995,13 @@ paths:
               type: object
               properties:
                 query:
-                  type: array
-                  nullable: false
-                  format: array
-                query.folder_id:
                   type: object
                   nullable: false
-                  format: object
-                query.template:
-                  type: object
-                  nullable: true
-                  format: object
+                  properties:
+                    folder_id:
+                      type: object
+                    template:
+                      type: object
                 document_ids:
                   type: array
                   nullable: false
@@ -18052,8 +18031,10 @@ paths:
     get:
       tags:
         - ECM - Tags
-      description: ""
-      parameters: []
+      description: "List ECM tags - only lists Tags created on the Tags area"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
@@ -18061,74 +18042,59 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  total:
+                    type: integer
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        title:
+                          type: string
+                        updated_at:
+                          type: string
+                          format: date-time
+                        created_at:
+                          type: string
+                          format: date-time
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Create new Tags"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
                 type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        title:
+                          type: string
+                        updated_at:
+                          type: string
+                          format: date-time
+                        created_at:
+                          type: string
+                          format: date-time
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
       requestBody:
         description: Request body
         content:
@@ -18139,65 +18105,47 @@ paths:
                 tags:
                   type: array
                   nullable: false
-                  format: array
-                tags.*.title:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
   /api/v2/ecm/tags/selectedTags:
     post:
       tags:
         - ECM - Tags
-      description: ""
-      parameters: []
+      description: "List Tags by name"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
-              type: object
-              properties: []
+              type: array
+              items:
+                type: string
   /api/v2/ecm/tags/filterTags:
     post:
       tags:
         - ECM - Tags
-      description: ""
-      parameters: []
+      description: "List tags by filter"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
@@ -18205,49 +18153,34 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                  total:
+                    type: integer
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              # properties: []
   /api/v2/ecm/tags/{tag}:
     get:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Get specific tag"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
@@ -18260,41 +18193,23 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  title:
+                    type: string
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Update specific Tag"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
@@ -18307,34 +18222,15 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  title:
+                    type: string
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -18349,106 +18245,61 @@ paths:
     delete:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Delete specific tag"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/tags/deleteMultiple:
     post:
       tags:
         - ECM - Tags
-      description: ""
-      parameters: []
+      description: "Delete multiple tags"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              properties:
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
   /api/v2/ecm/tags/{tag}/authorizations:
     get:
       tags:
         - ECM - Tags
-      description: ""
+      description: "List Tag permissions"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
@@ -18460,82 +18311,39 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Create new Tag permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
                 type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -18546,15 +18354,13 @@ paths:
                 permissions:
                   type: array
                   nullable: false
-                  format: array
-                permissions.*.permission:
-                  type: string
-                  nullable: false
-                  format: binary
-                permissions.*.mode:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      permission:
+                        type: string
+                      mode:
+                        type: string
                 user_id:
                   type: object
                   nullable: false
@@ -18571,17 +18377,20 @@ paths:
     get:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Get specific Tag permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Permission ID
           in: path
           style: simple
           required: true
@@ -18594,48 +18403,27 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Update specific Tag Permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Permission ID
           in: path
           style: simple
           required: true
@@ -18648,34 +18436,12 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -18686,15 +18452,13 @@ paths:
                 permissions:
                   type: array
                   nullable: false
-                  format: array
-                permissions.*.permission:
-                  type: string
-                  nullable: false
-                  format: binary
-                permissions.*.mode:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      permission:
+                        type: string
+                      mode:
+                        type: string
                 is_recursive:
                   type: boolean
                   nullable: false
@@ -18702,17 +18466,173 @@ paths:
     delete:
       tags:
         - ECM - Tags
-      description: ""
+      description: "Delete specific Tag permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: tag
-          description: string|required
+          description: Tag ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Permission ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+  /api/v2/ecm/folders:
+    get:
+      tags:
+        - ECM - Folders
+      description: "List ECM root folders"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMFolder'
+    post:
+      tags:
+        - ECM - Folders
+      description: "Create new ECM folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "403":
+          description: Forbidden
+        "404":
+          description: Parent folder not found
+        "422":
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: false
+                triggers:
+                  type: array
+                  nullable: false
+                  items:
+                    type: object
+                parent_id:
+                  type: string
+                  nullable: false
+  /api/v2/ecm/folders/deleted:
+    get:
+      tags:
+        - ECM - Folders
+      description: "List deleted ECM folders"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMFolder'
+        "403":
+          description: Forbidden
+  /api/v2/ecm/folders/restore:
+    put:
+      tags:
+        - ECM - Folders
+      description: "Restore multiple deleted folders"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      responses:
+        "200":
+          description: Successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+  /api/v2/ecm/folders/forceDelete:
+    put:
+      tags:
+        - ECM - Folders
+      description: "Permanently delete multiple ECM Folders"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      responses:
+        "204":
+          description: Successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+  /api/v2/ecm/folders/{folder}:
+    get:
+      tags:
+        - ECM - Folders
+      description: "Get specific ECM folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: folder
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -18724,43 +18644,93 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
+                $ref: '#/components/schemas/ECMFolder'
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+    put:
+      tags:
+        - ECM - Folders
+      description: "Update specific ECM folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: folder
+          description: Folder ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
           description: Successful operation
-        "400":
-          description: Bad Request
           content:
             application/json:
               schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMFolder'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: false
+                parent_id:
+                  type: string
+                  description: 'ID for parent ECM Folder'
+                  nullable: false
+                default_template:
+                  type: string
+                  description: 'ID for ECM Template to be used as default for this Folder'
+                  nullable: true
+                triggers:
+                  type: array
+                  nullable: false
+    delete:
+      tags:
+        - ECM - Folders
+      description: "Delete specific ECM Folder - sends folder to trash"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: folder
+          description: Folder ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Successful operation
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
   /api/v2/ecm/folders/{folder}/inviteViewerUsers:
     post:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Invite Viewer Users to specific Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: array|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -18772,35 +18742,15 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  type: object
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -18811,824 +18761,82 @@ paths:
                 emails:
                   type: array
                   nullable: false
-                  format: array
-                emails.*:
-                  type: object
-                  nullable: false
-                  format: object
+                  items:
+                    type: string
+                    format: email
                 agreement:
-                  type: object
-                  nullable: false
-                  format: object
-  /api/v2/ecm/documents/{document}/sorting:
-    put:
-      tags:
-        - ECM - Documents
-      description: ""
-      parameters:
-        - name: document
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
-  /api/v2/ecm/folders/generalSettings:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders/sorting:
-    put:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                sort_mode:
                   type: string
                   nullable: false
-                  format: string
-                order_by:
-                  type: string
-                  nullable: false
-                  format: string
-                order:
-                  type: string
-                  nullable: false
-                  format: string
-  /api/v2/ecm/folders/by-name/{name}:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: name
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders/{folder}/user/{user}:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: folder
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: user
-          description: integer|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-    post:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  nullable: false
-                  format: string
-                triggers:
-                  type: array
-                  nullable: false
-                  format: array
-  /api/v2/ecm/folders/deleted:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders/restore:
-    put:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
-  /api/v2/ecm/folders/forceDelete:
-    put:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
-  /api/v2/ecm/folders/{folder}:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: folder
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-    put:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: folder
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  nullable: false
-                  format: string
-                parent_id:
-                  type: object
-                  nullable: false
-                  format: object
-                default_template:
-                  type: object
-                  nullable: true
-                  format: object
-                triggers:
-                  type: array
-                  nullable: false
-                  format: array
-    delete:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: folder
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/{trashed_folder}/restore:
     put:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Restore trashed ECM Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: trashed_folder
-          description: string|required
+          description: Trashed Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/folders/{trashed_folder}/forceDelete:
     delete:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Permanently delete trashed ECM Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: trashed_folder
-          description: string|required
+          description: Trashed Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/trash/clean:
     delete:
       tags:
         - ECM - Folders
-      description: ""
-      parameters: []
+      description: "Permanently delete all ECM Folders in trash"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/{folder}/children:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "List ECM Folder children"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -19640,105 +18848,24 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMFolder'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders/{folder}/version/{active}:
-    put:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: folder
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: active
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/folders/{folder}/temporaryLink:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Lists the ECM shared documents links by folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -19751,41 +18878,22 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Update temporary link definitions"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -19794,38 +18902,12 @@ paths:
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -19836,23 +18918,27 @@ paths:
                 email:
                   type: array
                   nullable: false
-                  format: array
+                  items:
+                    type: string
+                    format: email
                 expiration:
-                  type: object
+                  type: number
                   nullable: false
-                  format: object
                 interval:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
+                  description: 'Available options are HOURS or DAYS'
   /api/v2/ecm/folders/{folder}/authorizations:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "List permissions for specific ECM Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -19864,82 +18950,41 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  type: object
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Create new ECM folder permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
                 type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -19950,15 +18995,13 @@ paths:
                 permissions:
                   type: array
                   nullable: false
-                  format: array
-                permissions.*.permission:
-                  type: string
-                  nullable: false
-                  format: binary
-                permissions.*.mode:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      permission:
+                        type: string
+                      mode:
+                        type: string
                 user_id:
                   type: object
                   nullable: false
@@ -19975,10 +19018,13 @@ paths:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Get ECM Folder permissions report"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -19991,49 +19037,113 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  view:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  edit:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  delete:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  create_documents:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  list_documents:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  delete_documents:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  create_subfolder:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  manage_upload_link:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  list_versions:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  request_signature:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  export_documents:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
+                  upload_files:
+                    type: object
+                    properties:
+                      permitted:
+                        type: boolean
+                      authorization:
+                        type: object
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/{folder}/authorizations/{id}:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Get specific ECM Folder permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Permission ID
           in: path
           style: simple
           required: true
@@ -20046,48 +19156,27 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Update specific ECM Folder permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Permission ID
           in: path
           style: simple
           required: true
@@ -20100,34 +19189,12 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -20138,15 +19205,13 @@ paths:
                 permissions:
                   type: array
                   nullable: false
-                  format: array
-                permissions.*.permission:
-                  type: string
-                  nullable: false
-                  format: binary
-                permissions.*.mode:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      permission:
+                        type: string
+                      mode:
+                        type: string
                 is_recursive:
                   type: boolean
                   nullable: false
@@ -20154,113 +19219,43 @@ paths:
     delete:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Delete specific ECM Folder permission"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Permission ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders/user/{user}:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters:
-        - name: user
-          description: integer|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/{folder}/documents:
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "List ECM Folder documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -20272,35 +19267,17 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/positionBoxes/{positionBox}/documents:
     get:
       tags:
@@ -20353,17 +19330,20 @@ paths:
     delete:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Delete specific ECM Folder trigger"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: trigger_id
-          description: string|required
+          description: Trigger ID
           in: path
           style: simple
           required: true
@@ -20372,100 +19352,58 @@ paths:
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/{folder}/triggers:
     post:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Create new ECM Folder Trigger"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
                 type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              # properties: []
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "List ECM Folder Triggers"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -20477,84 +19415,24 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  type: object
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/folders/triggers/types:
-    get:
-      tags:
-        - ECM - Folders
-      description: ""
-      parameters: []
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/folders/{folder}/emailTriggers:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "List Email Triggers for specific ECM Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
@@ -20566,82 +19444,41 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  type: object
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Create new Email Trigger for ECM Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
                 type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -20672,30 +19509,31 @@ paths:
                 template_fields:
                   type: array
                   nullable: false
-                  format: array
-                template_fields.*.source:
-                  type: string
-                  nullable: false
-                  format: string
-                template_fields.*.target:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                      target:
+                        type: string
   /api/v2/ecm/folders/{folder}/emailTriggers/{id}:
     get:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Get specific Email Trigger of a specific ECM Folder"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Email Trigger ID
           in: path
           style: simple
           required: true
@@ -20708,48 +19546,27 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Update specific ECM Folder Email Trigger"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Email Trigger ID
           in: path
           style: simple
           required: true
@@ -20762,34 +19579,12 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -20816,69 +19611,42 @@ paths:
                 template_fields:
                   type: array
                   nullable: false
-                  format: array
-                template_fields.*.source:
-                  type: string
-                  nullable: false
-                  format: string
-                template_fields.*.target:
-                  type: string
-                  nullable: false
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                      target:
+                        type: string
     delete:
       tags:
         - ECM - Folders
-      description: ""
+      description: "Delete specific ECM Folder Email Trigger"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: folder
-          description: string|required
+          description: Folder ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: id
-          description: string|required
+          description: Email Trigger ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/duplicateVersion/{version}:
     put:
       tags:
@@ -22483,7 +21251,7 @@ paths:
   : get:
       tags:
         - ECM - Files
-      description: "Download Signed result filee"
+      description: "Download Signed result file"
       security:
         - BasicAuth: []
         - OAuth2: []
@@ -23039,17 +21807,17 @@ paths:
     get:
       tags:
         - ECM - Templates
-      description: ""
+      description: "List Template Field options"
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: cid
-          description: string|required
+          description: Field CID
           in: path
           style: simple
           required: true
