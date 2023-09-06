@@ -244,6 +244,50 @@ components:
           type: integer
         total:
           type: integer
+    ResourcePaginatedResponse:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            current_page:
+              type: integer
+            from:
+              type: integer
+            last_page:
+              type: integer
+            links:
+              type: array
+              items:
+                type: object
+                properties:
+                  url:
+                    type: string
+                  label:
+                    type: string
+                  active:
+                    type: boolean
+            path:
+              type: string
+            per_page:
+              type: integer
+            to:
+              type: integer
+            total:
+              type: integer
+        first_page_url:
+          type: string
+        links:
+          type: object
+          properties:
+            first:
+              type: string
+            last:
+              type: string
+            prev:
+              type: string
+            next:
+              type: string
     UserInvitation:
       type: object
       properties:
@@ -579,6 +623,21 @@ components:
         contribute:
           type: boolean
         manage:
+          type: boolean
+        delete:
+          type: boolean
+    ECMTemplatePermission:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Permission'
+      properties:
+        view:
+          type: boolean
+        use:
+          type: boolean
+        edit:
+          type: boolean
+        export:
           type: boolean
         delete:
           type: boolean
@@ -17591,378 +17650,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Workspace'
 
-  /api/v2/ecm/temporaryLink/document/download/{token}:
-    get:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/temporaryLink/folder/view/{tokenFolderFile}/{token}:
-    get:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: tokenFolderFile
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/temporaryLink/document/view/{token}:
-    get:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/temporaryLink/folder/download/{tokenFolderFile}/{token}:
-    get:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: tokenFolderFile
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/temporaryLink/folder/auth/{token}:
-    post:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
-  /api/v2/ecm/temporaryLink/folderList/{hash}/{hashAuth}/{token}:
-    get:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: hash
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: hashAuth
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-  /api/v2/ecm/temporaryLink/documents/{token}:
-    get:
-      tags:
-        - ECM - Temporary Link
-      description: ""
-      parameters:
-        - name: token
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-
   /api/v2/ecm/documents/export:
     post:
       tags:
@@ -19248,7 +18935,7 @@ paths:
   /api/v2/ecm/folders/{folder}/documents:
     get:
       tags:
-        - ECM - Documents
+        - ECM - Folders
       description: "List ECM Folder documents"
       security:
         - BasicAuth: []
@@ -19281,7 +18968,7 @@ paths:
   /api/v2/ecm/positionBoxes/{positionBox}/documents:
     get:
       tags:
-        - ECM - Documents
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: positionBox
@@ -19647,109 +19334,31 @@ paths:
           description: Forbidden
         "404":
           description: Not Found
-  /api/v2/ecm/documents/{document}/duplicateVersion/{version}:
-    put:
-      tags:
-        - ECM - Documents
-      description: ""
-      parameters:
-        - name: document
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: version
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/search:
     post:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Search for ECM documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ECMDocument'
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -19757,224 +19366,148 @@ paths:
             schema:
               type: object
               properties:
+                limit:
+                  type: integer
+                  description: 'Limit of items to return in paginated response - if not present, will be 15 by default'
                 folder_id:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
                 template_id:
-                  type: object
+                  type: string
                   nullable: true
-                  format: object
                 text_search:
                   type: string
                   nullable: false
-                  format: string
                 conditions:
                   type: array
                   nullable: false
-                  format: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      conditions:
+                        type: string
+                      field:
+                        type: string
+                      value:
+                        type: string
                 created_between:
-                  type: array
+                  type: object
                   nullable: false
-                  format: array
-                created_between.start:
-                  type: string
-                  nullable: false
-                  format: string
-                created_between.end:
-                  type: string
-                  nullable: false
-                  format: string
+                  properties:
+                    start:
+                      type: string
+                    end:
+                      type: string
                 updated_between:
-                  type: array
+                  type: object
                   nullable: false
-                  format: array
-                updated_between.start:
-                  type: string
-                  nullable: false
-                  format: string
-                updated_between.end:
-                  type: string
-                  nullable: false
-                  format: string
+                  properties:
+                    start:
+                      type: string
+                    end:
+                      type: string
   /api/v2/ecm/documents/deleted:
     get:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "List trashed ECM Documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/restore:
     put:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Restore multiple trashed ECM Documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
   /api/v2/ecm/documents/forceDelete:
     put:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Permanently delete multiple ECM Documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
   /api/v2/ecm/documents:
     post:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Create new ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
         "404":
-          description: Not Found
+          description: Folder or Template not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -19985,180 +19518,124 @@ paths:
                 title:
                   type: string
                   nullable: true
-                  format: string
                 folder_id:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
                 template_id:
+                  type: string
+                  nullable: true
+                fields:
                   type: object
                   nullable: true
-                  format: object
-                fields:
-                  type: array
-                  nullable: true
-                  format: array
                 form_files:
                   type: array
                   nullable: false
-                  format: array
-                form_files.*:
-                  type: string
-                  nullable: false
-                  format: binary
+                  items:
+                    type: string
                 positionBox:
                   type: object
                   nullable: false
-                  format: object
                 physical_status_id:
-                  type: object
+                  type: integer
                   nullable: false
-                  format: object
                 physical_requested_by:
-                  type: object
+                  type: integer
                   nullable: false
-                  format: object
                 physical_status_updated_at:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
+                  format: date-time
                 files:
                   type: array
                   nullable: false
-                  format: array
-                files.*.remote_path:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.name:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.file_type:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.file_size:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.creator:
-                  type: object
-                  nullable: false
-                  format: object
-                files.*.legal_validity:
-                  type: array
-                  nullable: false
-                  format: array
-                files.*.legal_validity.certificate_id:
-                  type: integer
-                  nullable: false
-                  format: integer
-                files.*.legal_validity.title:
-                  type: string
-                  nullable: false
-                  format: string
-                files.*.legal_validity.author:
-                  type: string
-                  nullable: false
-                  format: string
-                files.*.legal_validity.keywords:
-                  type: array
-                  nullable: false
-                  format: array
-                files.*.legal_validity.scanning_location:
-                  type: string
-                  nullable: false
-                  format: string
-                files.*.legal_validity.doc_type:
-                  type: string
-                  nullable: false
-                  format: string
-                files.*.legal_validity.extra:
-                  type: array
-                  nullable: false
-                  format: array
-                files.*.legal_validity.extra.class:
-                  type: string
-                  nullable: true
-                  format: string
-                files.*.legal_validity.extra.creation_date:
-                  type: string
-                  nullable: true
-                  format: string
-                files.*.legal_validity.extra.creation_location:
-                  type: string
-                  nullable: true
-                  format: string
-                files.*.legal_validity.extra.destination:
-                  type: integer
-                  nullable: true
-                  format: integer
-                files.*.legal_validity.extra.storage_period:
-                  type: string
-                  nullable: true
-                  format: string
-                files.*.legal_validity.extra.genre:
-                  type: string
-                  nullable: true
-                  format: string
+                  items:
+                    type: object
+                    properties:
+                      remote_path:
+                        type: string
+                      name:
+                        type: string
+                      file_type:
+                        type: string
+                      file_size:
+                        type: string
+                      creator:
+                        type: integer
+                      legal_validity:
+                        type: object
+                        nullable: false
+                        properties:
+                          certificate_id:
+                            type: integer
+                          title:
+                            type: string
+                          author:
+                            type: string
+                          keywords:
+                            type: array
+                            items:
+                              type: string
+                          scanning_location:
+                            type: string
+                          doc_type:
+                            type: string
+                          extra:
+                            type: object
+                            properties:
+                              class:
+                                type: string
+                              creation_date:
+                                type: string
+                              creation_location:
+                                type: string
+                              destination:
+                                type: integer
+                              storage_period:
+                                type: string
+                              genre:
+                                type: string
   /api/v2/ecm/documents/move:
     put:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Move multiple ECM Documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              properties:
+                documentIds:
+                  type: array
+                  items:
+                    type: string
+                folder_id:
+                  type: string
 
   /api/v2/ecm/documents/{document}/versions:
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "List versions of a specific ECM document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -20170,50 +19647,31 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  type: object
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/versions/{version}:
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Get specific version of a specific ECM Docuemnt"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
         - name: version
-          description: string|required
+          description: Version ID
           in: path
           style: simple
           required: true
@@ -20226,42 +19684,55 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
+  /api/v2/ecm/documents/{document}/duplicateVersion/{version}:
+    put:
+      tags:
+        - ECM - Documents
+      description: "Duplicate specific version of a specific ECM document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: document
+          description: Document ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: version
+          description: Version ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
           content:
             application/json:
               schema:
                 type: object
-        "500":
-          description: Internal Server Error
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
   /api/v2/ecm/documents/{document}:
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Get specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -20273,42 +19744,21 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Update specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -20320,35 +19770,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: "#/components/schemas/ECMDocument"
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -20358,111 +19786,116 @@ paths:
               properties:
                 title:
                   type: string
-                  nullable: false
-                  format: string
+                  nullable: true
                 folder_id:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
                 template_id:
+                  type: string
+                  nullable: true
+                fields:
                   type: object
                   nullable: true
-                  format: object
-                fields:
+                form_files:
                   type: array
                   nullable: false
-                  format: array
+                  items:
+                    type: string
                 positionBox:
                   type: object
                   nullable: false
-                  format: object
                 physical_status_id:
-                  type: object
+                  type: integer
                   nullable: false
-                  format: object
                 physical_requested_by:
-                  type: object
+                  type: integer
                   nullable: false
-                  format: object
                 physical_status_updated_at:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
+                  format: date-time
                 files:
                   type: array
                   nullable: false
-                  format: array
-                files.*.remote_path:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.name:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.file_type:
-                  type: string
-                  nullable: false
-                  format: binary
-                files.*.file_size:
-                  type: string
-                  nullable: false
-                  format: binary
+                  items:
+                    type: object
+                    properties:
+                      remote_path:
+                        type: string
+                      name:
+                        type: string
+                      file_type:
+                        type: string
+                      file_size:
+                        type: string
+                      creator:
+                        type: integer
+                      legal_validity:
+                        type: object
+                        nullable: false
+                        properties:
+                          certificate_id:
+                            type: integer
+                          title:
+                            type: string
+                          author:
+                            type: string
+                          keywords:
+                            type: array
+                            items:
+                              type: string
+                          scanning_location:
+                            type: string
+                          doc_type:
+                            type: string
+                          extra:
+                            type: object
+                            properties:
+                              class:
+                                type: string
+                              creation_date:
+                                type: string
+                              creation_location:
+                                type: string
+                              destination:
+                                type: integer
+                              storage_period:
+                                type: string
+                              genre:
+                                type: string
     delete:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Delete specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/log:
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Get logs of a specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -20475,43 +19908,22 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
 
   /api/v2/ecm/documents/{trashed_document}/restore:
     put:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Restore specific trashed ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: trashed_document
-          description: string|required
+          description: Trashed Document ID
           in: path
           style: simple
           required: true
@@ -20520,175 +19932,90 @@ paths:
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+  /api/v2/ecm/documents/{trashed_document}/forceDelete:
+    delete:
+      tags:
+        - ECM - Documents
+      description: "Permanently delete specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: trashed_document
+          description: Trashed Document ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
-  /api/v2/ecm/documents/{trashed_document}/forceDelete:
-    delete:
-      tags:
-        - ECM - Documents
-      description: ""
-      parameters:
-        - name: trashed_document
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+              properties:
+                ids:
+                  type: array
+                  properties:
+                    ids:
+                      type: string
   /api/v2/ecm/documents/trash/clean:
     delete:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Permanently delete all trashed ECM Documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/multiple/massDelete:
     delete:
       tags:
         - ECM - Documents
-      description: ""
-      parameters: []
+      description: "Trash many ECM documents"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                description: 'Document IDs'
+              properties:
+                title:
+                  type: string
+                  nullable: true
   /api/v2/ecm/documents/{document}/files:
     get:
       tags:
@@ -21293,50 +20620,39 @@ paths:
     post:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Create comment on a specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
                 type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                properties:
+                  content:
+                    type: string
+                  created_by:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -21347,14 +20663,16 @@ paths:
                 content:
                   type: string
                   nullable: false
-                  format: string
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "List comments on a specific ECM Document"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -21366,35 +20684,21 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                    created_by:
+                      type: integer
+                    created_at:
+                      type: string
+                      format: date-time
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/documents/{document}/checkin:
     put:
       tags:
@@ -21808,6 +21112,95 @@ paths:
       tags:
         - ECM - Templates
       description: "List Template Field options"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: template
+          description: Template ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: cid
+          description: Field CID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+        "404":
+          description: Not Found
+    post:
+      tags:
+        - ECM - Templates
+      description: "List Template Field options - with Filter"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: template
+          description: Template ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: cid
+          description: Field CID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+        "404":
+          description: Not Found
+        "422":
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              # properties: []
+  /api/v2/ecm/templates/{template}/field/{cid}/generateAutoSequence:
+    post:
+      tags:
+        - ECM - Templates
+      description: "Generate Auto Sequence number for Template Field"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
           description: Template ID
@@ -21830,165 +21223,28 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
+                properties:
+                  code:
+                    type: string
+                  digits:
+                    type: string
+                  prefix:
+                    type: string
+                  year:
+                    type: integer
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-    post:
-      tags:
-        - ECM - Templates
-      description: ""
-      parameters:
-        - name: template
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: cid
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
-  /api/v2/ecm/templates/{template}/field/{cid}/generateAutoSequence:
-    post:
-      tags:
-        - ECM - Templates
-      description: ""
-      parameters:
-        - name: template
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-        - name: cid
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/templates/{template}/export:
     get:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Generates JSON that can be used to import the selected ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22000,164 +21256,73 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMTemplate'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/templates/import:
     post:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "Import new ECM Template from a .json definition file"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
         "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+          description: Invalid request
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
-              properties: []
+              properties:
+                definition_file:
+                  type: string
+                  format: binary
   /api/v2/ecm/templates:
     get:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "List ECM Templates"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMTemplate'
     post:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "Create new ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
         "201":
           description: Created
           content:
             application/json:
               schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMTemplate'
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -22172,97 +21337,75 @@ paths:
                 form:
                   type: array
                   nullable: false
+                  items:
+                    type: object
+                default_title:
+                  type: array
+                  nullable: false
                   format: array
+                default_title.enabled:
+                  type: boolean
+                  nullable: false
+                  format: boolean
+                default_title.title:
+                  type: string
+                  nullable: true
+                  format: string
+                default_title.append_number:
+                  type: boolean
+                  nullable: false
+                  format: boolean
+                default_title.digits:
+                  type: object
+                  nullable: false
+                  format: object
   /api/v2/ecm/templates/usable:
     get:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "List ECM Templates that can be used by the current User"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMTemplate'
   /api/v2/ecm/templates/deleted:
     get:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "List all trashed ECM Templates"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMTemplate'
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/templates/{template}:
     get:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Get specific ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22274,42 +21417,21 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMTemplate'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Update specific ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22321,35 +21443,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMTemplate'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -22364,7 +21464,8 @@ paths:
                 form:
                   type: array
                   nullable: false
-                  format: array
+                  items:
+                    type: object
                 default_title:
                   type: array
                   nullable: false
@@ -22388,58 +21489,36 @@ paths:
     delete:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Delete specific ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/templates/{template}/render:
     get:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Get specific ECM Template with all dynamic options loaded"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22451,43 +21530,22 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                $ref: '#/components/schemas/ECMTemplate'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/templates/{template}/permissions:
     get:
       tags:
         - ECM - Templates
-      description: ""
+      description: "List permissions for a specific ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22499,42 +21557,23 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMTemplatePermission'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     put:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Update permissions of an ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22546,35 +21585,79 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                type: array
+                items:
+                  $ref: '#/components/schemas/ECMTemplatePermission'
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
+          description: Invalid request
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  entity_type:
+                    type: string
+                    nullable: false
+                    format: string
+                  entity_id:
+                    type: integer
+                    nullable: false
+                    format: integer
+                  view:
+                    type: boolean
+                    nullable: false
+                    format: boolean
+                  edit:
+                    type: boolean
+                    nullable: false
+                    format: boolean
+                  export:
+                    type: boolean
+                    nullable: false
+                    format: boolean
+                  delete:
+                    type: boolean
+                    nullable: false
+                    format: boolean
+                  use:
+                    type: boolean
+                    nullable: false
+                    format: boolean
+  /api/v2/ecm/templates/{template}/duplicate:
+    post:
+      tags:
+        - ECM - Templates
+      description: "Clone a specific ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: template
+          description: Template ID
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Created
           content:
             application/json:
               schema:
-                type: object
-        "500":
-          description: Internal Server Error
+                $ref: '#/components/schemas/ECMTemplate'
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
       requestBody:
         description: Request body
         content:
@@ -22582,193 +21665,76 @@ paths:
             schema:
               type: object
               properties:
-                "*.entity_type":
+                form_title:
                   type: string
-                  nullable: false
-                  format: string
-                "*.entity_id":
-                  type: integer
-                  nullable: false
-                  format: integer
-                "*.view":
-                  type: boolean
-                  nullable: false
-                  format: boolean
-                "*.edit":
-                  type: boolean
-                  nullable: false
-                  format: boolean
-                "*.export":
-                  type: boolean
-                  nullable: false
-                  format: boolean
-                "*.delete":
-                  type: boolean
-                  nullable: false
-                  format: boolean
-                "*.use":
-                  type: boolean
-                  nullable: false
-                  format: boolean
-  /api/v2/ecm/templates/{template}/duplicate:
-    post:
-      tags:
-        - ECM - Templates
-      description: ""
-      parameters:
-        - name: template
-          description: string|required
-          in: path
-          style: simple
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
+                  description: 'Custom title for the new Template - if not provided, will be generated'
   /api/v2/ecm/templates/restore:
     put:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "Restore multiple trashed ECM Templates"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid Request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
   /api/v2/ecm/templates/forceDelete:
     put:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "Permanently delete multiple ECM Templates"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
           application/json:
             schema:
               type: object
-              properties: []
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
   /api/v2/ecm/templates/{trashed_template}/restore:
     put:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Restore specific trashed ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: trashed_template
-          description: string|required
+          description: Trashed Template ID
           in: path
           style: simple
           required: true
@@ -22777,142 +21743,57 @@ paths:
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: []
   /api/v2/ecm/templates/trash/clean:
     delete:
       tags:
         - ECM - Templates
-      description: ""
-      parameters: []
+      description: "Permanently delete all ECM Templates in the trash"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/templates/{trashed_template}/forceDelete:
     delete:
       tags:
         - ECM - Templates
-      description: ""
+      description: "Permanently delete a specific trashed ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: trashed_template
-          description: string|required
+          description: Trashed Template ID
           in: path
           style: simple
           required: true
           schema:
             type: string
       responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
         "204":
           description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
   /api/v2/ecm/templates/{template}/documents:
     get:
       tags:
         - ECM - Templates
-      description: ""
+      description: "List all documents that are associated to a specific ECM Template"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
       parameters:
         - name: template
-          description: string|required
+          description: Template ID
           in: path
           style: simple
           required: true
@@ -22924,35 +21805,17 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ECMDocument'
         "403":
           description: Forbidden
         "404":
           description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
 
   /api/v2/ecm/lifeCycle/protocol/base:
     get:
@@ -24068,7 +22931,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouses/general-search:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24116,7 +22979,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouses/getWarehouseTree:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24164,7 +23027,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouses/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24205,7 +23068,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouses/{warehouse}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouse
@@ -24252,7 +23115,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouse
@@ -24306,7 +23169,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouse
@@ -24354,7 +23217,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouses:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24402,7 +23265,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouseRooms/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24443,7 +23306,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouseRooms/{warehouse}/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouse
@@ -24491,7 +23354,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouseRooms/{warehouseRoom}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouseRoom
@@ -24538,7 +23401,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouseRoom
@@ -24592,7 +23455,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouseRoom
@@ -24640,7 +23503,7 @@ paths:
   /api/v2/ecm/physicalGuard/warehouseRooms:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24688,7 +23551,7 @@ paths:
   /api/v2/ecm/physicalGuard/roomDepartments/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24729,7 +23592,7 @@ paths:
   /api/v2/ecm/physicalGuard/roomDepartments/{warehouseRoom}/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouseRoom
@@ -24777,7 +23640,7 @@ paths:
   /api/v2/ecm/physicalGuard/roomDepartments/{roomDepartment}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: roomDepartment
@@ -24824,7 +23687,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: roomDepartment
@@ -24878,7 +23741,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: roomDepartment
@@ -24926,7 +23789,7 @@ paths:
   /api/v2/ecm/physicalGuard/roomDepartments:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -24974,7 +23837,7 @@ paths:
   /api/v2/ecm/physicalGuard/departmentCabinets/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25015,7 +23878,7 @@ paths:
   /api/v2/ecm/physicalGuard/departmentCabinets/{roomDepartment}/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: roomDepartment
@@ -25063,7 +23926,7 @@ paths:
   /api/v2/ecm/physicalGuard/departmentCabinets/{departmentCabinet}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: departmentCabinet
@@ -25110,7 +23973,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: departmentCabinet
@@ -25164,7 +24027,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: departmentCabinet
@@ -25212,7 +24075,7 @@ paths:
   /api/v2/ecm/physicalGuard/departmentCabinets:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25260,7 +24123,7 @@ paths:
   /api/v2/ecm/physicalGuard/cabinetShelves/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25301,7 +24164,7 @@ paths:
   /api/v2/ecm/physicalGuard/cabinetShelves/{departmentCabinet}/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: departmentCabinet
@@ -25349,7 +24212,7 @@ paths:
   /api/v2/ecm/physicalGuard/cabinetShelves/{cabinetShelf}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: cabinetShelf
@@ -25396,7 +24259,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: cabinetShelf
@@ -25450,7 +24313,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: cabinetShelf
@@ -25498,7 +24361,7 @@ paths:
   /api/v2/ecm/physicalGuard/cabinetShelves:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25546,7 +24409,7 @@ paths:
   /api/v2/ecm/physicalGuard/shelfPositions/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25587,7 +24450,7 @@ paths:
   /api/v2/ecm/physicalGuard/shelfPositions/getPositionByCode:
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25635,7 +24498,7 @@ paths:
   /api/v2/ecm/physicalGuard/shelfPositions/getPositionsByParent:
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25683,7 +24546,7 @@ paths:
   /api/v2/ecm/physicalGuard/shelfPositions/{cabinetShelf}/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: cabinetShelf
@@ -25731,7 +24594,7 @@ paths:
   /api/v2/ecm/physicalGuard/shelfPositions/{shelfPosition}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: shelfPosition
@@ -25778,7 +24641,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: shelfPosition
@@ -25832,7 +24695,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: shelfPosition
@@ -25880,7 +24743,7 @@ paths:
   /api/v2/ecm/physicalGuard/shelfPositions:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25928,7 +24791,7 @@ paths:
   /api/v2/ecm/physicalGuard/companies/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -25969,7 +24832,7 @@ paths:
   /api/v2/ecm/physicalGuard/companies/{company}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: company
@@ -26016,7 +24879,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: company
@@ -26070,7 +24933,7 @@ paths:
               properties: []
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: company
@@ -26118,7 +24981,7 @@ paths:
   /api/v2/ecm/physicalGuard/companies:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -26166,7 +25029,7 @@ paths:
   /api/v2/ecm/physicalGuard/positionBoxes/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -26207,7 +25070,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/positionBoxes/{physicalGuardRequestStatus}/listByStatus
   : get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: physicalGuardRequestStatus
@@ -26255,7 +25118,7 @@ paths:
   /api/v2/ecm/physicalGuard/positionBoxes/{company}/listByCompany:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: company
@@ -26303,7 +25166,7 @@ paths:
   /api/v2/ecm/physicalGuard/positionBoxes/{shelfPosition}/listByShelfPosition:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: shelfPosition
@@ -26351,7 +25214,7 @@ paths:
   /api/v2/ecm/physicalGuard/positionBoxes/{positionBox}:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: positionBox
@@ -26398,7 +25261,7 @@ paths:
           description: Internal Server Error
     put:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: positionBox
@@ -26480,7 +25343,7 @@ paths:
                   format: object
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: positionBox
@@ -26528,7 +25391,7 @@ paths:
   /api/v2/ecm/physicalGuard/positionBoxes:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -26600,7 +25463,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/positionBoxes/{positionBox}/status/{physicalGuardRequestStatus}
   : post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: positionBox
@@ -26662,7 +25525,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/positionBoxes/document/{document}/status/{physicalGuardRequestStatus}
   : post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: document
@@ -26724,7 +25587,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/positionBoxes/file/{file}/status/{physicalGuardRequestStatus}
   : post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: file
@@ -26786,7 +25649,7 @@ paths:
   /api/v2/ecm/physicalGuard/permissions/create:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -26834,7 +25697,7 @@ paths:
   /api/v2/ecm/physicalGuard/permissions/{physicalGuardPermission}/delete:
     delete:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: physicalGuardPermission
@@ -26882,7 +25745,7 @@ paths:
   /api/v2/ecm/physicalGuard/permissions/{warehouse}/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: warehouse
@@ -26930,7 +25793,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/status/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -26971,7 +25834,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/list:
     get:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -27012,7 +25875,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/filter:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters: []
       responses:
@@ -27060,7 +25923,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/positionBox/{positionBox}/create:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: positionBox
@@ -27115,7 +25978,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/document/{document}/create:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: document
@@ -27170,7 +26033,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/file/{file}/create:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: file
@@ -27225,7 +26088,7 @@ paths:
   /api/v2/ecm/physicalGuard/requests/mass/status/{physicalGuardRequestStatus}:
     post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: physicalGuardRequestStatus
@@ -27280,7 +26143,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/requests/{physicalGuardRequest}/positionBox/{positionBox}/status/{physicalGuardRequestStatus}
   : post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: physicalGuardRequest
@@ -27349,7 +26212,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/requests/{physicalGuardRequest}/document/{document}/status/{physicalGuardRequestStatus}
   : post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: physicalGuardRequest
@@ -27418,7 +26281,7 @@ paths:
   ? /api/v2/ecm/physicalGuard/requests/{physicalGuardRequest}/file/{file}/status/{physicalGuardRequestStatus}
   : post:
       tags:
-        - ECM - Physical Guard
+        - ECM - Physical Storage
       description: ""
       parameters:
         - name: physicalGuardRequest
@@ -27984,6 +26847,379 @@ paths:
             schema:
               type: object
               properties: []
+
+    /api/v2/ecm/temporaryLink/document/download/{token}:
+    get:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+  /api/v2/ecm/temporaryLink/folder/view/{tokenFolderFile}/{token}:
+    get:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: tokenFolderFile
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+  /api/v2/ecm/temporaryLink/document/view/{token}:
+    get:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+  /api/v2/ecm/temporaryLink/folder/download/{tokenFolderFile}/{token}:
+    get:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: tokenFolderFile
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+  /api/v2/ecm/temporaryLink/folder/auth/{token}:
+    post:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: []
+  /api/v2/ecm/temporaryLink/folderList/{hash}/{hashAuth}/{token}:
+    get:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: hash
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: hashAuth
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+  /api/v2/ecm/temporaryLink/documents/{token}:
+    get:
+      tags:
+        - ECM - Temporary Link
+      description: ""
+      parameters:
+        - name: token
+          description: string|required
+          in: path
+          style: simple
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+        "500":
+          description: Internal Server Error
+
   /api/v2/collaboration/messages/files/{collaboration_file}/download:
     get:
       tags:
