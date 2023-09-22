@@ -19511,7 +19511,7 @@ paths:
       requestBody:
         description: Request body
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
