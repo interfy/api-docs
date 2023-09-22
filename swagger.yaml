@@ -20868,10 +20868,10 @@ paths:
     get:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Get info for shared temporary links for current document"
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -20884,41 +20884,13 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
     post:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Generate and send temporary links for accessing the current document"
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -20931,34 +20903,10 @@ paths:
             application/json:
               schema:
                 type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid Request
       requestBody:
         description: Request body
         content:
@@ -20966,33 +20914,33 @@ paths:
             schema:
               type: object
               properties:
-                automatic:
-                  type: boolean
-                  nullable: false
-                  format: boolean
                 email:
                   type: array
                   nullable: false
-                  format: array
+                  items:
+                    type: string
+                    format: email
                 expiration:
-                  type: object
+                  type: integer
                   nullable: false
-                  format: object
+                  description: Quantity of days/hours for which the link will be valid
                 interval:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
+                  description: Type of the quantity of time represented on expiration field (should be DAYS or HOURS)
                 files:
                   type: array
-                  nullable: false
-                  format: array
+                  nullable: true
+                  description: Array with File IDs to be ignored when sending the link (these files WON'T be shown in the link)
+                  items:
+                    type: string
     put:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Update/regenerate the Temporary Link for the current Document"
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -21001,38 +20949,10 @@ paths:
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
         "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+          description: Invalid request
       requestBody:
         description: Request body
         content:
@@ -21040,33 +20960,33 @@ paths:
             schema:
               type: object
               properties:
-                automatic:
-                  type: boolean
-                  nullable: false
-                  format: boolean
                 email:
                   type: array
                   nullable: false
-                  format: array
+                  items:
+                    type: string
+                    format: email
                 expiration:
-                  type: object
+                  type: integer
                   nullable: false
-                  format: object
+                  description: Quantity of days/hours for which the link will be valid
                 interval:
-                  type: object
+                  type: string
                   nullable: false
-                  format: object
+                  description: Type of the quantity of time represented on expiration field (should be DAYS or HOURS)
                 files:
                   type: array
-                  nullable: false
-                  format: array
+                  nullable: true
+                  description: Array with File IDs to be ignored when sending the link (these files WON'T be shown in the link)
+                  items:
+                    type: string
     delete:
       tags:
         - ECM - Documents
-      description: ""
+      description: "Invalidate all generated temporary links for current document"
       parameters:
         - name: document
-          description: string|required
+          description: Document ID
           in: path
           style: simple
           required: true
@@ -21075,38 +20995,9 @@ paths:
       responses:
         "200":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-        "204":
-          description: Successful operation
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-        "401":
-          description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Not Found
-        "422":
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                type: object
-        "500":
-          description: Internal Server Error
+
   /api/v2/ecm/templates/{template}/field/{cid}/options:
     get:
       tags:
