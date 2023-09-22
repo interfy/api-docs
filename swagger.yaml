@@ -20928,6 +20928,7 @@ paths:
                   type: string
                   nullable: false
                   description: Type of the quantity of time represented on expiration field (should be DAYS or HOURS)
+                  enum: [DAYS, HOURS]
                 files:
                   type: array
                   nullable: true
@@ -20974,6 +20975,7 @@ paths:
                   type: string
                   nullable: false
                   description: Type of the quantity of time represented on expiration field (should be DAYS or HOURS)
+                  enum: [DAYS, HOURS]
                 files:
                   type: array
                   nullable: true
