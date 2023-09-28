@@ -20924,6 +20924,10 @@ paths:
                   type: integer
                   nullable: false
                   description: Quantity of days/hours for which the link will be valid
+                automatic:
+                  type: boolean
+                  nullable: false
+                  description: Determines whether all files will be shared automatically (must be set to false when using the files parameter)
                 interval:
                   type: string
                   nullable: false
@@ -20971,6 +20975,10 @@ paths:
                   type: integer
                   nullable: false
                   description: Quantity of days/hours for which the link will be valid
+                automatic:
+                  type: boolean
+                  nullable: false
+                  description: Determines whether all files will be shared automatically (must be set to false when using the files parameter)
                 interval:
                   type: string
                   nullable: false
