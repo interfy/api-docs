@@ -18309,6 +18309,39 @@ paths:
                   type: array
                   items:
                     type: string
+  /api/v2/ecm/folders/filter:
+    get:
+      tags:
+        - ECM - Folders
+      description: "Filter visible ECM folders"
+      security:
+        - BasicAuth: []
+        - OAuth2: []
+      parameters:
+        - name: name
+          description: Folder name to lookup
+          in: query
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ECMFolder'
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
   /api/v2/ecm/folders/{folder}:
     get:
       tags:
