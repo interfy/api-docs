@@ -18337,10 +18337,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ECMFolder'
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
   /api/v2/ecm/folders/{folder}:
     get:
       tags:
