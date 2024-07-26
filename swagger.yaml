@@ -38,6 +38,7 @@ servers:
           - 'clouddoc.io'
           - 'getfy.io'
           - 'sysdoc.com.br'
+          - 'uaify.io'
         default: 'interfy.io'
   - url: https://api.interfy.io
 
